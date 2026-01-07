@@ -7,7 +7,7 @@ import java.util.Scanner;
     Abstract Class, Interface
 */ 
  
-// ACCOUNT CLASS
+//ACCOUNT CLASS---------------------------------------------------------------------
 class Account {
     // Instance variables (private for encapsulation)
     private String name;      // Account holder's name
@@ -68,7 +68,7 @@ class Account {
         return balance;
     }
     
-// ABSTRACT CLASS--------------------------------------------------------------
+//ABSTRACT CLASS---------------------------------------------------------------
     // abstract classes cannot be instantiated directly; they are meant to be subclassed
     // they can contain abstract methods (without implementation) and normal methods (with implementation)
 
@@ -98,7 +98,7 @@ class SavingsAccount extends AccountBase {
     }   
 }// end of SavingsAccount subclass
  
-// INTERFACE------------------------------------------------------------------
+//INTERFACE--------------------------------------------------------------------
     // interfaces define methods that implementing classes must provide
     // they are used to achieve abstraction and multiple inheritance in Java
 interface Printable {
@@ -120,7 +120,7 @@ class AccountReport implements Printable {
     }
 }// end of interface implementation
  
-// MAIN CLASS--------------------------------------------------------------
+//MAIN CLASS-------------------------------------------------------------------
 public class Main {
     public static void main(String[] args) {
         System.out.println("==== Week 1: Account Class Demo ====");
