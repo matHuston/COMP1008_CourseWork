@@ -1,3 +1,4 @@
+import java.lang.classfile.Superclass;
 import java.util.Scanner;
  
  
@@ -45,7 +46,7 @@ public abstract class Employee {
 }
  
  
-// STEP 2: Define CommissionEmployee as a subclass
+// STEP 2: Define CommissionEmployee as a subclass with extends keyword
 public class CommissionEmployee extends Employee {
     private double grossSales;        // weekly sales
     private double commissionRate;    // percentage
@@ -53,30 +54,51 @@ public class CommissionEmployee extends Employee {
  
     public CommissionEmployee(String first, String last, String ssn,
                               double sales, double rate) {
-        super(first, last, ssn);
+        super(first, last, ssn); // this calls the superclass constructor from Employee
         // TODO: set grossSales and commissionRate with validation
+        setGrossSales(sales);
+        setCommissionRate(rate);
     }
  
  
-    // TODO: getters and setters for grossSales and commissionRate
- 
+    // TODO: getters and setters for grossSales and commissionRate - getters assign the value of the private variable to a public variable, and setters assign the value of the public variable to the private variable. The setter also includes validation to ensure that the values are within acceptable ranges.
+
+    //setters
+    public void setGrossSales(double sales) {
+        if(sales < 0.0) throw new IllegalArgumentException(
+            "Gross sales must be >= 0.0");
+        grossSales = sales;
+    }
+    public void setComissionRate(double rate) {
+        if (rate <= 0.0 || rate >=1.0) throw new IllegalArgumentException(
+            "Commission rate must be > 0.0 and < 1.0");
+        commissionRate = rate;
+    }
+
+    // getters
+    public double getGrossSales() {return grossSales;}
+    public double getCommissionRate() {return commissionRate;}
  
     @Override
     public double earnings() {
         // TODO: return grossSales * commissionRate
-        return 0.0;
+        return getCommissionRate() * getGrossSales();
     }
  
  
     @Override
     public String toString() {
         // TODO: include the super.toString() plus grossSales and commissionRate
-        return "";
+        return String.format("%s%n%s: $%, .2f; %s: %.2f", 
+        // this format includes the string from the superclass toString() method, then adds the gross sales and commission rate with appropriate labels and formatting. The %n is for a new line, $%, .2f formats the gross sales as currency with two decimal places, and %.2f formats the commission rate as a decimal with two decimal places.
+            "commision employee: " + super.toString(), 
+            "gross sales", getGrossSales(), 
+            "commission rate", getCommissionRate());
     }
 }
  
  
-// STEP 3: Define BasePlusCommissionEmployee subclass
+// STEP 3: Define BasePlusCommissionEmployee subclass, this is multilevel inheritance since it extends CommissionEmployee which extends Employee
 public class BasePlusCommissionEmployee extends CommissionEmployee {
     private double baseSalary;  // additional weekly salary
  
@@ -85,23 +107,31 @@ public class BasePlusCommissionEmployee extends CommissionEmployee {
                                       double sales, double rate, double salary) {
         super(first, last, ssn, sales, rate);
         // TODO: validate and set baseSalary
+        setBaseSalary(salary);
     }
  
+    public void setBaseSalary(double salary) {
+        if (salary < 0.0) throw new IllegalArgumentException(
+            "Base salary must be >= 0.0");
+        baseSalary = salary;
+    }
  
     // TODO: getter and setter for baseSalary
+    public double getBaseSalary() {return baseSalary;}
  
  
     @Override
     public double earnings() {
         // TODO: return baseSalary + super.earnings()
-        return 0.0;
+        return getBaseSalary() + super.earnings();
     }
  
  
     @Override
     public String toString() {
-        // TODO: include "Base salary" and call super.toString()
-        return "";
+        // TODO: include "Base salary" and call super.toString() - this super.toString() will call the toString() method from CommissionEmployee, which in turn calls the toString() method from Employee, so the final output will include information from all three classes in the inheritance hierarchy.
+        return String.format("base-salaried %s%n%s: $%,.2f", 
+            super.toString(), "base salary", getBaseSalary());
     }
 }
  
@@ -113,8 +143,17 @@ public class InheritanceDemo {
  
  
         // TODO: Create objects of CommissionEmployee and BasePlusCommissionEmployee
- 
+        CommissionEmployee cEmployee = new CommissionEmployee(
+            "Sue", "Jones", "222-22-2222", 10000.0, 0.06);
+        BasePlusCommissionEmployee bpEmployee = new BasePlusCommissionEmployee(
+            "Bob", "Smith", "333-33-3333", 5000.0, 0.04, 300.0);
  
         // TODO: Print their earnings individually
+        System.out.printf("%s%nearned: $%,.2f%n%n", 
+            cEmployee.toString(), cEmployee.earnings());
+        System.out.printf("%s%nearned: $%,.2f%n%n", 
+            bpEmployee.toString(), bpEmployee.earnings());
+
+        input.close();
     }
 }
